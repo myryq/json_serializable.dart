@@ -27,17 +27,24 @@ class JsonLiteralGenerator extends GeneratorForAnnotation<JsonLiteral> {
           '`annotation.path` must be relative path to the source file.');
     }
 
-    final sourcePathDir = p.dirname(buildStep.inputId.path);
-    final fileId = AssetId(buildStep.inputId.package,
-        p.join(sourcePathDir, annotation.read('path').stringValue));
-    final content = json.decode(await buildStep.readAsString(fileId));
+    try {
 
-    final asConst = annotation.read('asConst').boolValue;
+      final sourcePathDir = p.dirname(buildStep.inputId.path);
+      final fileId = AssetId(buildStep.inputId.package,
+          p.join(sourcePathDir, annotation.read('path').stringValue));
+      final content = json.decode(await buildStep.readAsString(fileId));
 
-    final thing = jsonLiteralAsDart(content).toString();
-    final marked = asConst ? 'const' : 'final';
+      final asConst = annotation.read('asConst').boolValue;
 
-    return '$marked _\$${element.name}JsonLiteral = $thing;';
+      final thing = jsonLiteralAsDart(content).toString();
+      final marked = asConst ? 'const' : 'final';
+
+      return '$marked _\$${element.name}JsonLiteral = $thing;';
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+
   }
 }
 

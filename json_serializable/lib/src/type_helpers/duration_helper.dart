@@ -22,7 +22,7 @@ class DurationHelper extends TypeHelper {
 
     final buffer = StringBuffer(expression);
 
-    if (context.nullable) {
+    if (true) {
       buffer.write('?');
     }
 
@@ -42,7 +42,6 @@ class DurationHelper extends TypeHelper {
     }
 
     return commonNullPrefix(
-      context.nullable,
       expression,
       'Duration(microseconds: $expression as int)',
     ).toString();

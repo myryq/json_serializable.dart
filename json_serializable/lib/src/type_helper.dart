@@ -15,9 +15,6 @@ abstract class TypeHelperContext {
   /// The field that code is being generated for.
   FieldElement get fieldElement;
 
-  /// Returns `true` if [fieldElement] could potentially contain a `null` value.
-  bool get nullable;
-
   /// [expression] may be just the name of the field or it may an expression
   /// representing the serialization of a value.
   Object serialize(DartType fieldType, String expression);
@@ -83,10 +80,6 @@ abstract class TypeHelper<T extends TypeHelperContext> {
 }
 
 Object commonNullPrefix(
-  bool nullable,
   String expression,
   Object unsafeExpression,
-) =>
-    nullable
-        ? '$expression == null ? null : $unsafeExpression'
-        : unsafeExpression;
+) => '$expression == null ? null : $unsafeExpression';

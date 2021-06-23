@@ -55,7 +55,7 @@ class JsonHelper extends TypeHelper<TypeHelperContextWithConfig> {
     }
 
     if (context.config.explicitToJson || toJsonArgs.isNotEmpty) {
-      return '$expression${context.nullable ? '?' : ''}'
+      return '$expression${true ? '?' : ''}'
           '.toJson(${toJsonArgs.map((a) => '$a, ').join()} )';
     }
     return expression;
@@ -94,7 +94,7 @@ class JsonHelper extends TypeHelper<TypeHelperContextWithConfig> {
       var asCastType = positionalParams.first.type;
 
       if (asCastType is InterfaceType) {
-        final instantiated = _instantiate(asCastType as InterfaceType, type);
+        final instantiated = _instantiate(asCastType as InterfaceType, targetType as InterfaceType); // -------- type
         if (instantiated != null) {
           asCastType = instantiated;
         }
@@ -114,7 +114,7 @@ class JsonHelper extends TypeHelper<TypeHelperContextWithConfig> {
       ];
 
       output = args.join(', ');
-    } else if (_annotation(context.config, type)?.createFactory == true) {
+    } else if (_annotation(context.config, targetType as InterfaceType)?.createFactory == true) {
       if (context.config.anyMap) {
         output += ' as Map';
       } else {
@@ -128,7 +128,7 @@ class JsonHelper extends TypeHelper<TypeHelperContextWithConfig> {
     // https://github.com/google/json_serializable.dart/issues/19
     output = '${targetType.element.name}.fromJson($output)';
 
-    return commonNullPrefix(context.nullable, expression, output).toString();
+    return commonNullPrefix(expression, output).toString();
   }
 }
 
@@ -257,7 +257,7 @@ InterfaceType _instantiate(
   }
 
   return ctorParamType.element.instantiate(
-    typeArguments: argTypes,
+    typeArguments: argTypes.cast<DartType>(),
     // TODO: not 100% sure nullabilitySuffix is right... Works for now
     nullabilitySuffix: NullabilitySuffix.none,
   );

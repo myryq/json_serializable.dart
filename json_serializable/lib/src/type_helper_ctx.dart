@@ -26,9 +26,6 @@ class TypeHelperCtx
   final FieldElement fieldElement;
 
   @override
-  bool get nullable => _key.nullable;
-
-  @override
   ClassElement get classElement => _helperCore.element;
 
   @override
@@ -89,8 +86,8 @@ class _ConvertPair {
       if (obj.isNull) {
         pair = _ConvertPair._(null, null);
       } else {
-        final toJson = _convertData(obj.objectValue, element, false);
-        final fromJson = _convertData(obj.objectValue, element, true);
+        final toJson = _convertData(obj.objectValue as DartObject, element, false);
+        final fromJson = _convertData(obj.objectValue as DartObject, element, true);
         pair = _ConvertPair._(fromJson, toJson);
       }
       _expando[element] = pair;

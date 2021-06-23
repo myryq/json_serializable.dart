@@ -137,9 +137,7 @@ abstract class EncodeHelper implements HelperCore {
   /// Returns `true` if the field can be written to JSON 'naively' – meaning
   /// we can avoid checking for `null`.
   bool _writeJsonValueNaive(FieldElement field) {
-    final jsonKey = jsonKeyFor(field);
-    return jsonKey.includeIfNull ||
-        (!jsonKey.nullable && !_fieldHasCustomEncoder(field));
+    return false;
   }
 
   /// Returns `true` if [field] has a user-defined encoder.

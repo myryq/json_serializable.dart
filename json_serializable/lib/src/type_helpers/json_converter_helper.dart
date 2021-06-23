@@ -31,8 +31,6 @@ class JsonConverterHelper extends TypeHelper {
       return null;
     }
 
-    logFieldWithConversionFunction(context.fieldElement);
-
     return LambdaResult(expression, '${converter.accessString}.toJson');
   }
 
@@ -48,8 +46,6 @@ class JsonConverterHelper extends TypeHelper {
     }
 
     final asContent = asStatement(converter.jsonType);
-
-    logFieldWithConversionFunction(context.fieldElement);
 
     return LambdaResult(
         '$expression$asContent', '${converter.accessString}.fromJson');
@@ -82,7 +78,7 @@ class _JsonConvertData {
 _JsonConvertData _typeConverter(DartType targetType, TypeHelperContext ctx) {
   List<_ConverterMatch> converterMatches(List<ElementAnnotation> items) => items
       .map((annotation) => _compatibleMatch(targetType, annotation))
-      .where((dt) => dt != null)
+      .whereType<_ConverterMatch>()
       .toList();
 
   var matchingAnnotations = converterMatches(ctx.fieldElement.metadata);

@@ -19,8 +19,10 @@ DartObject _jsonKeyAnnotation(FieldElement element) =>
         ? null
         : _jsonKeyChecker.firstAnnotationOf(element.getter));
 
-ConstantReader jsonKeyAnnotation(FieldElement element) =>
-    ConstantReader(_jsonKeyAnnotation(element));
+ConstantReader jsonKeyAnnotation(FieldElement element) {
+  return ConstantReader(_jsonKeyAnnotation(element));
+}
+
 
 /// Returns `true` if [element] is annotated with [JsonKey].
 bool hasJsonKeyAnnotation(FieldElement element) =>
@@ -87,7 +89,6 @@ JsonSerializable _valueForAnnotation(ConstantReader reader) => JsonSerializable(
           reader.read('genericArgumentFactories').literalValue as bool,
       ignoreUnannotated: reader.read('ignoreUnannotated').literalValue as bool,
       includeIfNull: reader.read('includeIfNull').literalValue as bool,
-      nullable: reader.read('nullable').literalValue as bool,
     );
 
 /// Returns a [JsonSerializable] with values from the [JsonSerializable]
@@ -120,7 +121,6 @@ JsonSerializable mergeConfig(
             config.genericArgumentFactories),
     ignoreUnannotated: annotation.ignoreUnannotated ?? config.ignoreUnannotated,
     includeIfNull: annotation.includeIfNull ?? config.includeIfNull,
-    nullable: annotation.nullable ?? config.nullable,
   );
 }
 

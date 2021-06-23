@@ -18,21 +18,6 @@ final _jsonKeyExpando = Expando<JsonKey>();
 JsonKey jsonKeyForField(FieldElement field, JsonSerializable classAnnotation) =>
     _jsonKeyExpando[field] ??= _from(field, classAnnotation);
 
-/// Will log "info" if [element] has an explicit value for [JsonKey.nullable]
-/// telling the programmer that it will be ignored.
-void logFieldWithConversionFunction(FieldElement element) {
-  final jsonKey = _jsonKeyExpando[element];
-  if (_explicitNullableExpando[jsonKey] ?? false) {
-    log.info(
-      'The `JsonKey.nullable` value on '
-      '`${element.enclosingElement.name}.${element.name}` will be ignored '
-      'because a custom conversion function is being used.',
-    );
-
-    _explicitNullableExpando[jsonKey] = null;
-  }
-}
-
 JsonKey _from(FieldElement element, JsonSerializable classAnnotation) {
   // If an annotation exists on `element` the source is a 'real' field.
   // If the result is `null`, check the getter – it is a property.
@@ -195,7 +180,6 @@ JsonKey _from(FieldElement element, JsonSerializable classAnnotation) {
     ignore: obj.read('ignore').literalValue as bool,
     includeIfNull: obj.read('includeIfNull').literalValue as bool,
     name: obj.read('name').literalValue as String,
-    nullable: obj.read('nullable').literalValue as bool,
     required: obj.read('required').literalValue as bool,
     unknownEnumValue: _annotationValue('unknownEnumValue', mustBeEnum: true),
   );
@@ -209,7 +193,6 @@ JsonKey _populateJsonKey(
   bool ignore,
   bool includeIfNull,
   String name,
-  bool nullable,
   bool required,
   Object unknownEnumValue,
 }) {
@@ -229,17 +212,13 @@ JsonKey _populateJsonKey(
     includeIfNull: _includeIfNull(
         includeIfNull, disallowNullValue, classAnnotation.includeIfNull),
     name: _encodedFieldName(classAnnotation, name, element),
-    nullable: nullable ?? classAnnotation.nullable,
     required: required ?? false,
     unknownEnumValue: unknownEnumValue,
   );
 
-  _explicitNullableExpando[jsonKey] = nullable != null;
 
   return jsonKey;
 }
-
-final _explicitNullableExpando = Expando<bool>('explicit nullable');
 
 String _encodedFieldName(JsonSerializable classAnnotation,
     String jsonKeyNameValue, FieldElement fieldElement) {

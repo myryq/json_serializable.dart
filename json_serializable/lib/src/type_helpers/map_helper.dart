@@ -35,14 +35,14 @@ class MapHelper extends TypeHelper<TypeHelperContextWithConfig> {
 
     final subFieldValue = context.serialize(valueType, closureArg);
     final subKeyValue =
-        _forType(keyType)?.serialize(keyType, _keyParam, false) ??
+        _forType(keyType)?.serialize(keyType, _keyParam) ??
             context.serialize(keyType, _keyParam);
 
     if (closureArg == subFieldValue && _keyParam == subKeyValue) {
       return expression;
     }
 
-    final optionalQuestion = context.nullable ? '?' : '';
+    final optionalQuestion = true ? '?' : '';
 
     return '$expression$optionalQuestion'
         '.map(($_keyParam, $closureArg) => '
@@ -82,7 +82,7 @@ class MapHelper extends TypeHelper<TypeHelperContextWithConfig> {
         }
       }
 
-      if (!context.nullable &&
+      if (!true &&
           (valueArgIsAny ||
               simpleJsonTypeChecker.isAssignableFromType(valueArg))) {
         // No mapping of the values or null check required!
@@ -96,7 +96,7 @@ class MapHelper extends TypeHelper<TypeHelperContextWithConfig> {
 
     final itemSubVal = context.deserialize(valueArg, closureArg);
 
-    final optionalQuestion = context.nullable ? '?' : '';
+    final optionalQuestion = true ? '?' : '';
 
     final mapCast =
         context.config.anyMap ? 'as Map' : 'as Map<String, dynamic>';
@@ -112,7 +112,7 @@ class MapHelper extends TypeHelper<TypeHelperContextWithConfig> {
 
     final toFromString = _forType(keyArg);
     if (toFromString != null) {
-      keyUsage = toFromString.deserialize(keyArg, keyUsage, false, true);
+      keyUsage = toFromString.deserialize(keyArg, keyUsage, true);
     }
 
     return '($expression $mapCast)$optionalQuestion.map( '

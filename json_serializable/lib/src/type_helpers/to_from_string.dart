@@ -51,15 +51,12 @@ class ToFromStringHelper {
   String serialize(
     DartType type,
     String expression,
-    bool nullable,
   ) {
     if (!matches(type)) {
       return null;
     }
 
-    if (nullable) {
-      expression = '$expression?';
-    }
+    expression = '$expression?';
 
     return '$expression.$_toString';
   }
@@ -67,7 +64,6 @@ class ToFromStringHelper {
   String deserialize(
     DartType type,
     String expression,
-    bool nullable,
     bool isString,
   ) {
     if (!matches(type)) {
@@ -76,7 +72,7 @@ class ToFromStringHelper {
 
     final parseParam = isString ? expression : '$expression as String';
 
-    return commonNullPrefix(nullable, expression, '$_parse($parseParam)')
+    return commonNullPrefix(expression, '$_parse($parseParam)')
         .toString();
   }
 }

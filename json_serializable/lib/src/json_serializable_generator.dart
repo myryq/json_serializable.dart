@@ -67,9 +67,15 @@ class JsonSerializableGenerator
         element: element,
       );
     }
+    try {
+      final classElement = element as ClassElement;
+      final helper = GeneratorHelper(_settings, classElement, annotation);
+      return helper.generate();
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
 
-    final classElement = element as ClassElement;
-    final helper = GeneratorHelper(_settings, classElement, annotation);
-    return helper.generate();
+
   }
 }

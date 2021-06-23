@@ -40,5 +40,8 @@ Builder jsonSerializable(BuilderOptions options) {
     }
 
     throw StateError(lines.join('\n'));
+  } catch (e) {
+    print(e);
+    rethrow;
   }
 }

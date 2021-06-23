@@ -36,11 +36,14 @@ class Settings {
 
   final List<TypeHelper> _typeHelpers;
 
-  Iterable<TypeHelper> get allHelpers => const <TypeHelper>[
-        ConvertHelper(),
-        JsonConverterHelper(),
-        GenericFactoryHelper(),
-      ].followedBy(_typeHelpers).followedBy(_coreHelpers);
+  Iterable<TypeHelper> get allHelpers {
+
+    return const <TypeHelper>[
+      ConvertHelper(),
+      JsonConverterHelper(),
+      GenericFactoryHelper(),
+    ].followedBy(_typeHelpers).followedBy(_coreHelpers);
+  }
 
   final JsonSerializable _config;
 

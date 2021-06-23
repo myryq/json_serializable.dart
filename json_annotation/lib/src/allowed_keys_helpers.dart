@@ -7,13 +7,15 @@
 /// `JsonKey.required` is `true` for any annotated fields.
 ///
 /// Should not be used directly.
-void $checkKeys(Map map,
-    {List<String> allowedKeys,
-    List<String> requiredKeys,
-    List<String> disallowNullValues}) {
-  if (map != null && allowedKeys != null) {
+void $checkKeys(
+    Map map, {
+      List<String>? allowedKeys,
+      List<String>? requiredKeys,
+      List<String>? disallowNullValues,
+    }) {
+  if (allowedKeys != null) {
     final invalidKeys =
-        map.keys.cast<String>().where((k) => !allowedKeys.contains(k)).toList();
+    map.keys.cast<String>().where((k) => !allowedKeys.contains(k)).toList();
     if (invalidKeys.isNotEmpty) {
       throw UnrecognizedKeysException(invalidKeys, map, allowedKeys);
     }
@@ -21,16 +23,18 @@ void $checkKeys(Map map,
 
   if (requiredKeys != null) {
     final missingKeys =
-        requiredKeys.where((k) => !map.keys.contains(k)).toList();
+    requiredKeys.where((k) => !map.keys.contains(k)).toList();
     if (missingKeys.isNotEmpty) {
       throw MissingRequiredKeysException(missingKeys, map);
     }
   }
 
-  if (map != null && disallowNullValues != null) {
+  if (disallowNullValues != null) {
     final nullValuedKeys = map.entries
-        .where((entry) =>
-            disallowNullValues.contains(entry.key) && entry.value == null)
+        .where(
+          (entry) =>
+      disallowNullValues.contains(entry.key) && entry.value == null,
+    )
         .map((entry) => entry.key as String)
         .toList();
 
@@ -63,7 +67,7 @@ class UnrecognizedKeysException extends BadKeyException {
   @override
   String get message =>
       'Unrecognized keys: [${unrecognizedKeys.join(', ')}]; supported keys: '
-      '[${allowedKeys.join(', ')}]';
+          '[${allowedKeys.join(', ')}]';
 
   UnrecognizedKeysException(this.unrecognizedKeys, Map map, this.allowedKeys)
       : super._(map);
